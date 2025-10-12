@@ -1,0 +1,21 @@
+# === Core runtime ===
+python-dotenv
+requests
+
+# === AWS Bedrock / AgentCore integration ===
+strands-agents
+bedrock-agentcore
+boto3
+
+# === Model & agent orchestration ===
+langgraph
+langchain
+langchain-community
+
+# === Web search tools ===
+duckduckgo-search
+ddgs
+
+# === Logging / Utilities ===
+tqdm
+rich

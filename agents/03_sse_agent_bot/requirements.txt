@@ -1,0 +1,12 @@
+# Core Bedrock AgentCore runtime (AWS-managed agent hosting)
+bedrock-agentcore
+
+# LangChain integrations for AWS Bedrock (ChatBedrock model wrapper)
+langchain
+langchain-aws
+
+# LangGraph for workflow orchestration
+langgraph
+
+# Optional: LangChain core (for schema objects like HumanMessage)
+langchain-core

@@ -1,0 +1,5 @@
+.env
+.env*
+.venv
+.bedrock_agentcore.yaml
+.bedrock_agentcore
