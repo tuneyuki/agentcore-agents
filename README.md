@@ -20,7 +20,7 @@
 
 ---
 
-### **③ ストリーミング応答エージェント**
+### **③ ストリーミング応答タスク分解プランナーエージェント**
 
 * **目的:** LangGraphを用いて、複数ステップの処理結果をリアルタイムで返すエージェントを構築する。
 * **学習ポイント:** SSE（Server-Sent Events）による段階的応答と、LangGraphのステップ実行制御。
@@ -29,12 +29,13 @@
 
 ---
 
-### **④ Webリサーチャー**
+### **④ CodeInterpreterエージェント**
 
-* **目的:** Web検索し、情報を収集・要約する。
-* **学習ポイント:** 外部API利用、情報統合、要約スキル。
-* **技術:** Python + Requests / SerpAPI + LLM。
-* **デモ例:** 「今月発表されたAIモデルをまとめて」→最新記事を要約。
+- **目的:**  生成した回答を実際のPythonコードで検証し、計算・論理・アルゴリズムの正確性を確認する。
+- **学習ポイント:**  Bedrock AgentCoreのCode Interpreter機能をツールとして統合し、Strands Agent経由で実行・結果検証を行う。
+- **技術:**  AWS Bedrock AgentCore・Strands Agent・Bedrock Model・Code Interpreter Client を連携。
+- **デモ例:**  「Can all the planets in the solar system fit between the earth and moon?」と入力 →  コードを自動生成・実行し、計算結果を基に結論を提示。
+
 
 ---
 
