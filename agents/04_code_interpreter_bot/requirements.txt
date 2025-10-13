@@ -1,0 +1,3 @@
+# Core Bedrock AgentCore runtime (AWS-managed agent hosting)
+bedrock-agentcore
+strands-agents

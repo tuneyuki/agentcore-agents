@@ -113,9 +113,7 @@
 
 ---
 
-## 💡 提案：共通プロジェクト構成にすると便利！
-
-もし10個をまとめて管理・デモするなら、こんな構成が便利です👇
+## フォルダ構成
 
 ```
 ai-agents/
@@ -258,3 +256,34 @@ ai-agents/
     ]
 }
 ```
+
+
+## 得た学び
+### 1 Memory
+
+* Short Term Memoryの読み取りとLong Term Memoryの読み取りのPermissionは異なる。
+* Long Term Memoryの読み取りには、`bedrock-agentcore:RetrieveMemoryRecords` が必要だった。
+
+```
+		{
+			"Effect": "Allow",
+			"Action": [
+				"bedrock-agentcore:ListEvents",
+				"bedrock-agentcore:CreateEvent",
+				"bedrock-agentcore:GetEvent",
+				"bedrock-agentcore:ListMemories",
+				"bedrock-agentcore:GetMemory",
+				"bedrock-agentcore:RetrieveMemoryRecords"
+			],
+			"Resource": [
+				"arn:aws:bedrock-agentcore:us-east-1:180048383118:memory/*"
+			]
+		}
+```
+
+### 3 SSE
+* yieldで自在に途中のリターンを返却できる。
+
+
+### 4 Code Interpreter
+* Tool としてCodeInterpreterを登録したら、適切な回答を返すまで複数回のInterpreter呼び出しが行われうる。
