@@ -215,3 +215,89 @@ ai-agents/
 
 ### 4 Code Interpreter
 * Tool としてCodeInterpreterを登録したら、適切な回答を返すまで複数回のInterpreter呼び出しが行われうる。
+<<<<<<< HEAD
+=======
+
+### 5. Agent with Auth
+* 環境変数は、`agentcore launch` コマンドの引数で簡単に指定できる
+
+```
+agentcore launch --env OPENAI_API_KEY="sk-proj-xxxxxxxx"
+```
+
+* CognitoのUserPoolにユーザー初回追加した状態では、APIでのログインができない。ユーザーが初回ログインしてPW変更することで、初めて有効化される。
+* IDProviderは、デフォルトではUSERNAME/PASSWORDでの認証はDisableになっている。Enableしてあげる必要がある。あとから変更もできる。
+
+#### 🔑 認証付き AgentCore 呼び出しのポイントまとめ
+
+---
+
+##### 🧩 1. 認証モードを「OAuth」に設定する
+
+- AgentCore Runtime を作るときに、  
+    Cognito の設定（`discoveryUrl` と `allowedClients`）を指定する必要がある。
+- これを設定しないと IAM 認証モード扱いになり、OAuth トークンが無視される。
+    
+
+---
+
+##### 🔐 2. Cognito クライアントに「Client Secret」がある場合は必ず SECRET_HASH を使う
+
+- Cognito の App Client を “Secret 付き” で作ったら、  
+    その Secret で署名した `SECRET_HASH` を送らないと認証エラーになる。
+- Secret 無しのクライアントなら不要。
+
+---
+
+##### 👤 3. Cognito ユーザーは「Force change password」を解除しておく
+
+- ユーザー作成直後は一時パスワード状態になっていてログインできない。
+- 管理者コマンドやコンソールで **「パスワードを恒久化」** しておく必要がある。
+
+---
+
+##### 🚫 4. boto3 では OAuth Agent を直接呼べない
+
+- `boto3.client('bedrock-agentcore')` は IAM 用（SigV4）専用。
+- OAuth 認証で呼ぶ場合は **`requests.post()` で HTTPS 直接呼び出し** が必要。
+
+---
+
+##### 🎟️ 5. Token の種類に注意
+
+- Cognito は 3 種のトークンを返す：
+    - AccessToken ✅ → API呼び出し用（これを使う）
+    - IdToken ❌ → 表示用
+    - RefreshToken → 再認証用
+- AgentCore に渡すのは **AccessToken** 一択。
+    
+
+---
+
+##### 🌐 6. 正しい呼び出しURLを使う
+
+- Agent 呼び出しのエンドポイントは  
+    `/runtimes/{AgentARN}/invocations`。
+- `/identities/oauth2/invoke` は別用途（使わない）。
+
+
+### 6. fastapi_agent
+* Agentcore-starter-kitを使わない場合は、自分でECRにDockerビルドしてプッシュしてやる必要があるため、Dockerが動かせる環境でないと使えない。
+
+- 🚀 ECR デプロイ手順（us-east-1 / fastapi_agent）
+	- 🧱 リポジトリ作成
+	- aws ecr create-repository --repository-name fastapi_agent --region us-east-1
+
+- 🔐 ECR ログイン
+	- aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <ccount_id>.dkr.ecr.us-east-1.amazonaws.com
+
+- 🏗️ ビルド＆プッシュ（ARM64対応）
+	- docker buildx build --platform linux/arm64 -t <account_id>.dkr.ecr.us-east-1.amazonaws.com/fastapi_agent:latest --push .
+
+- 🔍 プッシュ確認
+	- aws ecr describe-images --repository-name fastapi_agent --region us-east-1
+
+### 7. customer support agent.
+
+* AWS SSM
+>>>>>>> 76c87af (add auth)
